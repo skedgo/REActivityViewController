@@ -29,15 +29,19 @@
 @class REActivity;
 
 typedef void (^REActivityActionBlock)(REActivity *activity, REActivityViewController *activityViewController);
+typedef void (^REActivityPreparationBlock)(REActivity *activity, REActivityActionBlock actionBlock);
 
 @interface REActivity : NSObject
 
 @property (strong, readonly, nonatomic) NSString *title;
 @property (strong, readonly, nonatomic) UIImage *image;
 @property (copy, nonatomic) REActivityActionBlock actionBlock;
+@property (copy, nonatomic) REActivityPreparationBlock preparationBlock;
 @property (strong, nonatomic) REActivityViewController *activityViewController;
 @property (strong, nonatomic) NSDictionary *userInfo;
 
-- (id)initWithTitle:(NSString *)title image:(UIImage *)image actionBlock:(REActivityActionBlock)actionBlock;
+- (id)initWithTitle:(NSString *)title
+							image:(UIImage *)image
+				actionBlock:(REActivityActionBlock)actionBlock;
 
 @end

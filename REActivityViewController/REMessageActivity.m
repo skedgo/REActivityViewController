@@ -31,37 +31,40 @@
 
 - (id)init
 {
-    self = [super initWithTitle:NSLocalizedStringFromTable(@"activity.Message.title", @"REActivityViewController", @"Message")
-                          image:[UIImage imageNamed:@"REActivityViewController.bundle/Icon_Message"]
-                    actionBlock:nil];
-    
-    if (!self)
-        return nil;
-    
-    __typeof(&*self) __weak weakSelf = self;
-    self.actionBlock = ^(REActivity *activity, REActivityViewController *activityViewController) {
-        NSDictionary *userInfo = weakSelf.userInfo ? weakSelf.userInfo : activityViewController.userInfo;
-        NSString *text = [userInfo objectForKey:@"text"];
-        NSURL *url = [userInfo objectForKey:@"url"];
-        [activityViewController dismissViewControllerAnimated:YES completion:^{
-            MFMessageComposeViewController *messageComposeViewController = [[MFMessageComposeViewController alloc] init];
-            [REActivityDelegateObject sharedObject].controller = activityViewController.presentingController;
-            messageComposeViewController.messageComposeDelegate = [REActivityDelegateObject sharedObject];
-            
-            if (text && !url)
-                messageComposeViewController.body = text;
-            
-            if (!text && url)
-                messageComposeViewController.body = url.absoluteString;
-            
-            if (text && url)
-                messageComposeViewController.body = [NSString stringWithFormat:@"%@ %@", text, url.absoluteString];
-            
-            [activityViewController.presentingController presentViewController:messageComposeViewController animated:YES completion:nil];
-        }];
-    };
-    
-    return self;
+	self = [super initWithTitle:NSLocalizedStringFromTable(@"activity.Message.title", @"REActivityViewController", @"Message")
+											 image:[UIImage imageNamed:@"REActivityViewController.bundle/Icon_Message"]
+								 actionBlock:nil];
+	
+	if (!self)
+		return nil;
+	
+	__typeof(&*self) __weak weakSelf = self;
+	
+	self.actionBlock = ^(REActivity *activity, REActivityViewController *activityViewController) {
+		
+		NSDictionary *userInfo = weakSelf.userInfo ? weakSelf.userInfo : activityViewController.userInfo;
+		NSString *text = [userInfo objectForKey:@"text"];
+		NSURL *url = [userInfo objectForKey:@"url"];
+		[activityViewController dismissViewControllerAnimated:YES completion:^
+		{
+			MFMessageComposeViewController *messageComposeViewController = [[MFMessageComposeViewController alloc] init];
+			[REActivityDelegateObject sharedObject].controller = activityViewController.presentingController;
+			messageComposeViewController.messageComposeDelegate = [REActivityDelegateObject sharedObject];
+			
+			if (text && !url)
+					messageComposeViewController.body = text;
+			
+			if (!text && url)
+					messageComposeViewController.body = url.absoluteString;
+			
+			if (text && url)
+					messageComposeViewController.body = [NSString stringWithFormat:@"%@ %@", text, url.absoluteString];
+			
+			[activityViewController.presentingController presentViewController:messageComposeViewController animated:YES completion:nil];
+		}];
+	};
+	
+	return self;
 }
 
 @end

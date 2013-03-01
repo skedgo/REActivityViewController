@@ -31,47 +31,50 @@
 
 - (id)init
 {
-    self = [super initWithTitle:NSLocalizedStringFromTable(@"activity.Mail.title", @"REActivityViewController", @"Mail")
-                          image:[UIImage imageNamed:@"REActivityViewController.bundle/Icon_Mail"]
-                    actionBlock:nil];
-    
-    
-    if (!self)
-        return nil;
-    
-    __typeof(&*self) __weak weakSelf = self;
-    self.actionBlock = ^(REActivity *activity, REActivityViewController *activityViewController) {
-        NSDictionary *userInfo = weakSelf.userInfo ? weakSelf.userInfo : activityViewController.userInfo;
-        NSString *subject = [userInfo objectForKey:@"subject"];
-        NSString *text = [userInfo objectForKey:@"text"];
-        UIImage *image = [userInfo objectForKey:@"image"];
-        NSURL *url = [userInfo objectForKey:@"url"];
-        
-        [activityViewController dismissViewControllerAnimated:YES completion:^{
-            MFMailComposeViewController *mailComposeViewController = [[MFMailComposeViewController alloc] init];
-            [REActivityDelegateObject sharedObject].controller = activityViewController.presentingController;
-            mailComposeViewController.mailComposeDelegate = [REActivityDelegateObject sharedObject];
-            
-            if (text && !url)
-                [mailComposeViewController setMessageBody:text isHTML:YES];
-            
-            if (!text && url)
-                [mailComposeViewController setMessageBody:url.absoluteString isHTML:YES];
-            
-            if (text && url)
-                [mailComposeViewController setMessageBody:[NSString stringWithFormat:@"%@ %@", text, url.absoluteString] isHTML:YES];
-            
-            if (image)
-                [mailComposeViewController addAttachmentData:UIImageJPEGRepresentation(image, 0.75f) mimeType:@"image/jpeg" fileName:@"photo.jpg"];
-            
-            if (subject)
-                [mailComposeViewController setSubject:subject];
-            
-            [activityViewController.presentingController presentViewController:mailComposeViewController animated:YES completion:nil];
-        }];
-    };
-    
-    return self;
+	self = [super initWithTitle:NSLocalizedStringFromTable(@"activity.Mail.title", @"REActivityViewController", @"Mail")
+											 image:[UIImage imageNamed:@"REActivityViewController.bundle/Icon_Mail"]
+								 actionBlock:nil];
+	
+	if (!self)
+		return nil;
+	
+	__typeof(&*self) __weak weakSelf = self;
+	
+	self.actionBlock = ^(REActivity *activity, REActivityViewController *activityViewController) {
+		
+		NSDictionary *userInfo = weakSelf.userInfo ? weakSelf.userInfo : activityViewController.userInfo;
+		NSString *subject = [userInfo objectForKey:@"subject"];
+		NSString *text = [userInfo objectForKey:@"text"];
+		UIImage *image = [userInfo objectForKey:@"image"];
+		NSURL *url = [userInfo objectForKey:@"url"];
+		
+		[activityViewController dismissViewControllerAnimated:YES completion:^
+		{
+			MFMailComposeViewController *mailComposeViewController = [[MFMailComposeViewController alloc] init];
+			[REActivityDelegateObject sharedObject].controller = activityViewController.presentingController;
+			mailComposeViewController.mailComposeDelegate = [REActivityDelegateObject sharedObject];
+			
+			if (text && !url)
+					[mailComposeViewController setMessageBody:text isHTML:YES];
+			
+			if (!text && url)
+					[mailComposeViewController setMessageBody:url.absoluteString isHTML:YES];
+			
+			if (text && url)
+					[mailComposeViewController setMessageBody:[NSString stringWithFormat:@"%@ %@", text, url.absoluteString] isHTML:YES];
+			
+			if (image)
+					[mailComposeViewController addAttachmentData:UIImageJPEGRepresentation(image, 0.75f) mimeType:@"image/jpeg" fileName:@"photo.jpg"];
+			
+			if (subject)
+					[mailComposeViewController setSubject:subject];
+			
+			[activityViewController.presentingController presentViewController:mailComposeViewController animated:YES completion:nil];
+		}];
+		
+	};
+
+	return self;
 }
 
 @end

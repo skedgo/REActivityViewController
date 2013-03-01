@@ -24,18 +24,22 @@
 //
 
 #import "REActivity.h"
+#import "REActivityViewController.h"
 
 @implementation REActivity
 
-- (id)initWithTitle:(NSString *)title image:(UIImage *)image actionBlock:(REActivityActionBlock)actionBlock
+- (id)initWithTitle:(NSString *)title
+							image:(UIImage *)image
+				actionBlock:(REActivityActionBlock)actionBlock
 {
-    self = [super init];
-    if (self) {
-        _title = title;
-        _image = image;
-        _actionBlock = [actionBlock copy];
-    }
-    return self;
+	self = [super init];
+	if (self) {
+		_title = title;
+		_image = image;
+		_actionBlock = [actionBlock copy];
+		_preparationBlock = nil;
+	}
+	return self;
 }
 
 @end

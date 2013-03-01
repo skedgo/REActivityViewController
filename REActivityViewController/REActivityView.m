@@ -145,11 +145,17 @@
 
 - (void)buttonPressed:(UIButton *)button
 {
-    REActivity *activity = [_activities objectAtIndex:button.tag];
-    activity.activityViewController = _activityViewController;
-    if (activity.actionBlock) {
-        activity.actionBlock(activity, _activityViewController);
-    }
+	REActivity *activity = [_activities objectAtIndex:button.tag];
+	activity.activityViewController = _activityViewController;
+	
+	if (activity.preparationBlock &&
+			activity.actionBlock) {
+		activity.preparationBlock(activity, activity.actionBlock);
+	} else if (activity.actionBlock) {
+		activity.actionBlock(activity, _activityViewController);
+	} else {
+		DLog(@"prep block: %@, action block: %@", activity.preparationBlock, activity.actionBlock);
+	}
 }
 
 #pragma mark -
